@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>jQuery And PHP Dynamic forms</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+$(document).ready(function(){
+    var i = 2;
+	var op = 'Optiunea';
+	$('#add').click(function() {
+		$('<div><input type="text" class="field" name="dynamic[]" placeholder="' + op + i+'" value="" /></div>').fadeIn('slow').appendTo('.inputs');
+		i++;
+	});
+	
+	$('#remove').click(function() {
+	if(i > 1) {
+		$('.field:last').remove();
+		i--; 
+	}
+	});
+	
+	$('#reset').click(function() {
+	while(i > 2) {
+		$('.field:last').remove();
+		i--;
+	}
+	});
+	
+
+// here's our click function for when the forms submitted
+	
+	$('.submit').click(function(){
+	
+	var answers = [];
+    $.each($('.field'), function() {
+        answers.push($(this).val()); 
+    });
+	
+    if(answers.length == 0) { 
+        answers = "none"; 
+    }   
+
+	alert(answers);
+    $.post('getpoll.php', {'poll[]': answers }, function(data){
+   // do something with received data!
+        $(data).appendTo(document.body);
+    });
+     
+    
+	return false;
+	});
+	
+});
+
+</script>
+<style>input{border:1px solid #ccc;padding:8px;font-size:14px;width:300px;}.submit{width:110px;background-color:#FF6;padding:3px;border:1px solid #FC0;margin-top:20px;}</style>
+</head>
+<body>
+ 
+
+
+<div id="container">
+    <div class="sky_ad" align="right"></div>
+        <div class="dynamic-form">
+            <a href="#" id="add">Adauga optiune</a> | <a href="#" id="remove">Sterge optiune</a> | <a href="#" id="reset">Resetare</a>
+            <form>
+                <div class="inputs">
+                    <div><input type="text" name="dynamic[]" class="field" placeholder="Titlul chestionarul"value=""/></div>
+                    <div><input type="text" name="dynamic[]" class="field" placeholder="Optiunea1"value=""/></div>
+                </div>
+                <input name="submit" type="button" class="submit" value="Trimite chestionar"/>
+            </form>
+        </div>
+    </div>
+</div>
+ 
+</body>
+</html>

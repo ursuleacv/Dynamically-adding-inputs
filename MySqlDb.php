@@ -157,7 +157,7 @@ class MysqlDB {
          $keys = array_keys($this->_where);
          $where_prop = $keys[0];
          $where_value = $this->_where[$where_prop];
-
+         $this->_paramTypeList ='';
          // if update data was passed, filter through
          // and create the SQL query, accordingly.
          if ($hasTableData) {
@@ -186,6 +186,7 @@ class MysqlDB {
       }
 
       // Determine if is INSERT query
+       $this->_paramTypeList =''; //null 
       if ($hasTableData) {
          $pos = strpos($this->_query, 'INSERT');
 
